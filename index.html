@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Suitmedia Ideas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top custom-navbar">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="assets/logo.png" alt="Logo" height="32" onerror="this.onerror=null; this.src='https://via.placeholder.com/100x32?text=Logo';"/>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="#">Work</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Services</a></li>
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Ideas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Careers</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Banner -->
+  <section class="banner">
+    <div class="banner-bg" id="bannerBg">
+      <div class="banner-text text-white text-center">
+        <h1 class="display-4 fw-bold">Ideas</h1>
+        <p class="lead">Where all our great things begin</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- List & Controls -->
+  <div class="container mt-5">
+    <div class="d-flex justify-content-between mb-3">
+      <div>
+        Show per page:
+        <select id="perPage" class="form-select d-inline-block w-auto">
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+      <div>
+        Sort:
+        <select id="sortBy" class="form-select d-inline-block w-auto">
+          <option value="-published_at">Newest</option>
+          <option value="published_at">Oldest</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="postList" class="row g-4"></div>
+    <nav class="d-flex justify-content-center mt-4">
+      <ul id="pagination" class="pagination"></ul>
+    </nav>
+  </div>
+
+  <!-- Script -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    // Force axios to use JSON
+    axios.defaults.headers.common['Accept'] = 'application/json';
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
