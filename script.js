@@ -10,7 +10,7 @@ function extractFirstImageFromContent(htmlContent) {
 
 async function fetchBanner(postIndex = 0) {
   try {
-    const url = "http://localhost:3000/api/ideas?page=1&size=10&sort=-published_at";
+    const url = "https://server-suitmedia-production.up.railway.app/api/ideas?page=1&size=10&sort=-published_at";
     const res = await axios.get(url);
 
     const post = res.data?.data?.[postIndex];
@@ -64,7 +64,7 @@ function saveState() {
 
 async function fetchIdeas() {
   try {
-    const url = `http://localhost:3000/api/ideas?page=${currentPage}&size=${perPage}&sort=${sort}`;
+    const url = `https://server-suitmedia-production.up.railway.app/api/ideas?page=1&size=10&sort=-published_at=${currentPage}&size=${perPage}&sort=${sort}`;
     console.log("📡 Meminta data ke:", url);
 
     const res = await axios.get(url);
