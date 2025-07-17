@@ -21,6 +21,13 @@
   height: 400px;
   position: relative;
 }
+#bannerBg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4); /* bayangan hitam transparan */
+  z-index: 1;
+}
 
 .parallax-bg {
   position: absolute;
@@ -39,6 +46,14 @@
   position: relative;
   z-index: 2;
   padding-top: 120px;
+  padding-bottom: 80px;
+  color: #fff;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 60vh;
+  font-weight: bold;
 }
 
 .banner-shape {
@@ -72,8 +87,52 @@
 }
 
 /* Pagination */
-.pagination li {
-  cursor: pointer;
+.pagination .page-item .page-link {
+  color: black;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #FF6B00;
+  color: #fff;
+  border-color: #FF6B00;
+}
+
+.pagination .page-item .page-link:hover {
+  background-color: #e9f2ff;
+  border-color: #007bff;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.pagination .page-item.disabled .page-link {
+  color: #ccc;
+  pointer-events: none;
+  background-color: #f8f9fa;
+}
+.nav-link {
+  position: relative;
+  transition: color 0.2s;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #fff;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
 }
 
 /* Utility */

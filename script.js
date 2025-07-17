@@ -56,6 +56,20 @@ let sort = localStorage.getItem("sort") || "-published_at";
 perPageSelect.value = perPage;
 sortSelect.value = sort;
 
+perPageSelect.addEventListener("change", () => {
+  perPage = parseInt(perPageSelect.value);
+  currentPage = 1;
+  saveState();
+  fetchIdeas();
+});
+
+sortSelect.addEventListener("change", () => {
+  sort = sortSelect.value;
+  currentPage = 1;
+  saveState();
+  fetchIdeas();
+});
+
 function saveState() {
   localStorage.setItem("page", currentPage);
   localStorage.setItem("perPage", perPage);
@@ -69,17 +83,25 @@ async function fetchIdeas() {
 
     const res = await axios.get(url);
     const data = res.data.data;
+    const meta = res.data.meta;
 
     console.log("✅ API Response:", data);
 
     renderPosts(data);
 
-    const meta = res.data.meta;
+    if (meta && meta.total) {
+      const from = (currentPage - 1) * perPage + 1;
+      const to = Math.min(currentPage * perPage, meta.total);
+      const total = meta.total;
+      document.getElementById("infoRange").textContent = `Showing ${from} - ${to} of ${total}`;
+    }
+
     if (meta?.last_page) renderPagination(meta.last_page);
   } catch (error) {
     console.error("❌ Gagal fetch data:", error);
   }
 }
+
 
 
 function renderPosts(posts) {
@@ -112,8 +134,31 @@ function renderPosts(posts) {
 
 
 function renderPagination(totalPages) {
+  const maxVisiblePages = 7;
+  const pagination = document.getElementById("pagination");
   pagination.innerHTML = "";
-  for (let i = 1; i <= totalPages; i++) {
+
+  // Hitung grup halaman saat ini
+  const currentGroup = Math.floor((currentPage - 1) / maxVisiblePages);
+  const startPage = currentGroup * maxVisiblePages + 1;
+  const endPage = Math.min(startPage + maxVisiblePages - 1, totalPages);
+
+  // Tombol Prev
+  const prev = document.createElement("li");
+  prev.className = `page-item ${currentPage === 1 ? "disabled" : ""}`;
+  prev.innerHTML = `<a class="page-link" href="#">« Prev</a>`;
+  prev.addEventListener("click", e => {
+    e.preventDefault();
+    if (currentPage > 1) {
+      currentPage--;
+      saveState();
+      fetchIdeas();
+    }
+  });
+  pagination.appendChild(prev);
+
+  // Nomor halaman terbatas pada 7
+  for (let i = startPage; i <= endPage; i++) {
     const li = document.createElement("li");
     li.className = `page-item ${i === currentPage ? "active" : ""}`;
     li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
@@ -127,21 +172,21 @@ function renderPagination(totalPages) {
     });
     pagination.appendChild(li);
   }
+
+  // Tombol Next
+  const next = document.createElement("li");
+  next.className = `page-item ${currentPage === totalPages ? "disabled" : ""}`;
+  next.innerHTML = `<a class="page-link" href="#">Next »</a>`;
+  next.addEventListener("click", e => {
+    e.preventDefault();
+    if (currentPage < totalPages) {
+      currentPage++;
+      saveState();
+      fetchIdeas();
+    }
+  });
+  pagination.appendChild(next);
 }
-
-perPageSelect.addEventListener("change", () => {
-  perPage = parseInt(perPageSelect.value);
-  currentPage = 1;
-  saveState();
-  fetchIdeas();
-});
-
-sortSelect.addEventListener("change", () => {
-  sort = sortSelect.value;
-  currentPage = 1;
-  saveState();
-  fetchIdeas();
-});
 
 fetchIdeas();
 
@@ -159,13 +204,21 @@ window.addEventListener("scroll", () => {
 });
 
 // Active menu
-const path = window.location.pathname;
+const currentPath = window.location.pathname;
 document.querySelectorAll(".nav-link").forEach(link => {
-  if (link.getAttribute("href") === path) {
+  if (link.getAttribute("href") === currentPath) {
     link.classList.add("active");
+  } else {
+    link.classList.remove("active");
   }
 });
 
+document.querySelectorAll(".nav-link").forEach(link => {
+  link.addEventListener("click", function () {
+    document.querySelectorAll(".nav-link").forEach(el => el.classList.remove("active"));
+    this.classList.add("active");
+  });
+});
 // Parallax scroll
 window.addEventListener("scroll", () => {
   const scrolled = window.scrollY;
