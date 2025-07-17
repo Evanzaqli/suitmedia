@@ -41,7 +41,7 @@ async function fetchBanner(postIndex = 0) {
   }
 }
 
-fetchBanner(0); // Tampilkan banner dari post ke-5 (indeks 4)
+fetchBanner(8); // Tampilkan banner dari post ke-5 (indeks 4)
 
 
 const postList = document.getElementById("postList");
